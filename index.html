@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DESIGN AND IMPLEMENTATION OF PORTABLE SOIL FERTILITY TESTING DEVICE</title>
+	<title class="ti">Crop Fertilizer Calculator</title>
+	<style>
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="number"] {
+			width: 100px;
+			margin-left: 0px;
+            margin-bottom: 10px;
+		}
+		button {
+			margin-top: 0px;
+			padding: 5px 5px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		.result {
+			margin-top: 20px;
+			font-size: 15px;
+		}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-left: 20%;
+        }
+		.ti {
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Crop Fertilizer Calculator</h1>
+	<label for="crop-select">Select a crop:</label>
+	<select id="crop-select">
+		<option value="rice">Rice</option>
+		<option value="sugarcane">Sugarcane</option>
+		<option value="cotton">Cotton</option>
+		<option value="ragi">Ragi</option>
+	</select>
+	<label for="n-input">N value (measured):</label>
+	<input type="number" id="n-input" min="0">
+	<label for="p-input">P value (measured):</label>
+	<input type="number" id="p-input" min="0">
+	<label for="k-input">K value (measured):</label>
+	<input type="number" id="k-input" min="0">
+	<button id="calculate-btn">Calculate</button>
+	<div class="result">
+		<p>The required amount of NPK for the selected crop is: <span id="NPK-amount"></span></p>
+	</div>
+    <div class="result">
+		<p>The required amount of fertilizer for the selected crop is: <span id="fertilizer-amount"></span></p>
+	</div>
+	<script>
+		// define the crop fertilizer requirements in Kg per Ha
+		const cropFertilizerRequirements = {
+			rice: { n: 120, p: 60, k: 40 },
+			sugarcane: { n: 250, p: 75, k: 190 },
+			cotton: { n: 120, p: 60, k: 60 },
+			ragi: { n: 60, p: 35, k: 35 }
+		};
+
+		// define the calculation function
+		function calculateFertilizer() {
+			const crop = document.getElementById("crop-select").value;
+			const nValue = Number(document.getElementById("n-input").value);
+			const pValue = Number(document.getElementById("p-input").value);
+			const kValue = Number(document.getElementById("k-input").value);
+
+			// calculate the required amount of NPK
+			const nRequired = cropFertilizerRequirements[crop].n - nValue;
+			const pRequired = cropFertilizerRequirements[crop].p - pValue;
+			const kRequired = cropFertilizerRequirements[crop].k - kValue;
+			
+			// calculate the required amount of fertilizer for each nutrient
+            const ureaRequired = nRequired * 2.17
+            const sspRequired = pRequired * 6.25
+            const mopRequired = kRequired * 1.66
+
+			// display the required amount of NPK dose
+			const NPKAmountEl = document.getElementById("NPK-amount");
+			NPKAmountEl.textContent = `${nRequired} Kg/ha of N,|||| ${pRequired} Kg/ha of P,|||| and ${kRequired} Kg/ha of K`;
+            // display the required amount of fertilizer
+			const fertilizerAmountEl = document.getElementById("fertilizer-amount");
+			fertilizerAmountEl.textContent = `${ureaRequired.toFixed(1)} Kg/ha of Urea,|||| ${sspRequired.toFixed(1)} Kg/ha of SSP,|||| and ${mopRequired.toFixed(1)} Kg/ha of MOP`;
+		}
+		// attach the calculation function to the button click event
+		const calculateBtn = document.getElementById("calculate-btn");
+        calculateBtn.addEventListener("click", calculateFertilizer);
+	</script>
+</body>
+</html>
